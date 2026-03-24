@@ -1,0 +1,195 @@
+﻿@page
+@model KWETEY.Pages.Dashboard.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    body {
+        margin: 0;
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Prevent navbar overlap */
+    .main-content {
+        margin-top: 80px;
+        padding: 20px;
+    }
+
+    /* Container */
+    .tables-container {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    /* Card Styling */
+    .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .card-header {
+        padding: 12px 20px;
+        font-weight: 600;
+        font-size: 14px;
+        color: white;
+        background: linear-gradient(90deg, #0aa3a3, #007b8a);
+    }
+
+    /* Table Styling */
+    .stat-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+    }
+
+        .stat-table th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .stat-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+    .text-center {
+        text-align: center;
+        width: 50px;
+    }
+
+    .table-link {
+        color: #0aa3a3;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+        .table-link:hover {
+            text-decoration: underline;
+        }
+
+    .summary-footer-row {
+        background-color: #34495e;
+        color: white;
+        font-weight: bold;
+    }
+
+    .legend-text {
+        font-size: 11px;
+        color: #777;
+        text-align: center;
+        padding: 8px;
+        background: #fafafa;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .stat-table {
+            font-size: 10px;
+        }
+
+        .card-header {
+            font-size: 12px;
+        }
+    }
+</style>
+
+<div class="main-content">
+
+    <div class="tables-container">
+
+        <!-- Student Attendance -->
+        <div class="card">
+            <div class="card-header">Student Attendance</div>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Class</th>
+                        <th class="text-center">S</th>
+                        <th class="text-center">Pr</th>
+                        <th class="text-center">Ab</th>
+                        <th class="text-center">Ex</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cls in Model.StudentAttendance)
+                    {
+                        <tr>
+                            <td><a href="#" class="table-link">@cls.Name</a></td>
+                            <td class="text-center">@cls.Count</td>
+                            <td class="text-center">0</td>
+                            <td class="text-center">0</td>
+                            <td class="text-center">0</td>
+                        </tr>
+                    }
+
+                    <tr class="summary-footer-row">
+                        <td>Summary</td>
+                        <td class="text-center">@Model.StudentAttendance.Sum(x => x.Count)</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="legend-text">
+                S - Students, Pr - Present, Ab - Absent, Ex - Exited
+            </div>
+        </div>
+
+        <!-- Employee Attendance -->
+        <div class="card">
+            <div class="card-header">Employee Attendance</div>
+
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th class="text-center">S</th>
+                        <th class="text-center">Pr</th>
+                        <th class="text-center">Ab</th>
+                        <th class="text-center">Ex</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var emp in Model.EmployeeAttendance)
+                    {
+                        <tr>
+                            <td><a href="#" class="table-link">@emp.Name</a></td>
+                            <td class="text-center">@emp.Count</td>
+                            <td class="text-center">0</td>
+                            <td class="text-center">0</td>
+                            <td class="text-center">0</td>
+                        </tr>
+                    }
+
+                    <tr class="summary-footer-row">
+                        <td>Summary</td>
+                        <td class="text-center">@Model.EmployeeAttendance.Sum(x => x.Count)</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="legend-text">
+                S - Employees, Pr - Present, Ab - Absent, Ex - Exited
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,193 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    // Retrieve the school data injected by our Middleware
+    var schoolName = Context.Items["SchoolName"] as string ?? "KWETEY";
+    var schoolLogo = Context.Items["SchoolLogo"] as string ?? "/images/default-logo.png";
+    var brandColor = Context.Items["SchoolColor"] as string ?? "#00b0f0";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* This dynamic CSS variable controls every button and icon in the app */
+        :root { --school-accent: @brandColor; }
+        
+        .sidebar { background: #1e293b; border-right: 3px solid var(--school-accent); }
+        .btn-primary, .active-nav { background: var(--school-accent) !important; color: white; }
+        .text-accent { color: var(--school-accent); }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="brand-box" style="padding: 20px; text-align: center;">
+            <img src="@schoolLogo" style="height: 50px; margin-bottom: 10px;" />
+            <h4 style="color: white; font-size: 14px;">@schoolName</h4>
+        </div>
+        
+        <nav>
+            <a href="/Dashboard" class="nav-link"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="/Students" class="nav-link"><i class="fas fa-user-graduate"></i> Students</a>
+            @if (User.IsInRole("SuperAdmin")) {
+                <hr style="border-color: rgba(255,255,255,0.1)" />
+                <a href="/Admin" class="nav-link" style="color: #f39c12;"><i class="fas fa-crown"></i> Master Console</a>
+            }
+        </nav>
+    </div>
+
+    <main>@RenderBody()</main>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - KWETEY</title>
+    
+    <style>
+            /* Global Reset */
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: Arial, sans-serif;
+                background: #e6e6e6;
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            /* 1. TOPBAR SECTION */
+            .top-header {
+                display: flex;
+                height: 45px;
+                flex-shrink: 0;
+                color: white;
+                z-index: 1000;
+            }
+
+            /* Orange Brand Box */
+            .brand-area {
+                background: #f39c12;
+                width: 220px;
+                display: flex;
+                align-items: center;
+                padding-left: 15px;
+                font-weight: bold;
+                font-size: 14px;
+            }
+
+            /* Blue School Bar */
+            .school-info-bar {
+                background: #00b0f0;
+                flex-grow: 1;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 15px;
+                font-weight: bold;
+                font-size: 13px;
+            }
+
+            /* Login Link Styling (Top Right) */
+            .top-login-link {
+                color: white;
+                text-decoration: none;
+                font-size: 12px;
+                font-weight: normal;
+                border: 1px solid rgba(255,255,255,0.4);
+                padding: 4px 12px;
+                border-radius: 3px;
+                transition: background 0.2s;
+            }
+
+                .top-login-link:hover {
+                    background: rgba(255,255,255,0.2);
+                }
+
+            /* 2. MAIN LAYOUT WRAPPER */
+            .main-wrapper {
+                display: flex;
+                flex: 1;
+                overflow: hidden;
+            }
+
+            /* SIDEBAR (Your Menu) */
+            .sidebar {
+                width: 220px;
+                background: #1f2d3d;
+                color: white;
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+                .sidebar ul {
+                    list-style: none;
+                }
+
+                    .sidebar ul li {
+                        border-bottom: 1px solid #2e3d4f;
+                    }
+
+                        .sidebar ul li a {
+                            display: block;
+                            padding: 14px 20px;
+                            color: #bdc3c7;
+                            text-decoration: none;
+                            font-size: 13px;
+                        }
+
+                            .sidebar ul li a:hover {
+                                background: #0c6d8a;
+                                color: white;
+                            }
+
+            /* 3. CONTENT AREA */
+            .content-container {
+                flex: 1;
+                padding: 20px;
+                overflow-y: auto;
+            }
+
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="brand-area">
+            🌐 KWETEY
+        </div>
+        <div class="school-info-bar">
+            <span>☰ HIS MAJESTY ACCELERATION SCHOOL</span>
+            
+            <a href="/Identity/Account/Login" class="top-login-link">Login</a>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/">🏠 Dashboard</a></li>
+                <li><a href="/Students">👥 Students</a></li>
+                <li><a href="/Academics">🎓 Academics</a></li>
+                <li><a href="/Assessments">📝 Assessments</a></li>
+                <li><a href="/Fees">💰 Fees</a></li>
+                <li><a href="/HR">👔 HR</a></li>
+                <li><a href="/Settings">⚙️ Settings</a></li>
+            </ul>
+        </nav>
+
+        <main class="content-container">
+            @RenderBody()
+        </main>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

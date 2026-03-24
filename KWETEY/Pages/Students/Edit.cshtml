@@ -1,0 +1,29 @@
+﻿@page "{id:int}"
+@model KWETEY.Pages.Students.EditModel
+
+<h2>Edit Student</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Student.Id" />
+
+    <div>
+        <label>Name</label><br />
+        <input asp-for="Student.Name" />
+    </div>
+
+    <div>
+        <label>Class</label><br />
+        <input asp-for="Student.Class" />
+    </div>
+
+    <div>
+        <label>Gender</label><br />
+        <select asp-for="Student.Gender">
+            <option>Male</option>
+            <option>Female</option>
+        </select>
+    </div>
+
+    <br />
+    <button type="submit">Update</button>
+</form>

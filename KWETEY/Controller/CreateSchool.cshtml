@@ -1,0 +1,53 @@
+@model KWETEY.Models.School
+@{
+    ViewData["Title"] = "Create School";
+}
+
+<h2>Create a New School</h2>
+
+<form asp-action="CreateSchool" method="post">
+    <div class="form-group">
+        <label for="name">School Name</label>
+        <input type="text" name="name" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="logo">Logo URL</label>
+        <input type="text" name="logo" class="form-control" placeholder="/images/default.png" />
+    </div>
+
+    <div class="form-group">
+        <label for="color">Theme Color</label>
+        <input type="text" name="color" class="form-control" placeholder="#00b0f0" />
+    </div>
+
+    <div class="form-group">
+        <label for="motto">School Motto</label>
+        <input type="text" name="motto" class="form-control" />
+    </div>
+
+    <hr />
+
+    <h4>Admin Login Details</h4>
+    <div class="form-group">
+        <label for="adminUsername">Admin Username</label>
+        <input type="text" name="adminUsername" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="adminPassword">Admin Password</label>
+        <input type="password" name="adminPassword" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create School</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="text-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}

@@ -1,0 +1,47 @@
+:root {
+    --glass: rgba(255, 255, 255, 0.08);
+    --accent: #00b0f0; /* default, will be overridden inline */
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top right, #004a7c, #001f3f);
+    font-family: 'Inter', sans-serif;
+}
+
+.glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 28px;
+    padding: 50px 40px;
+    width: 380px;
+    text-align: center;
+    color: white;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+.btn-signin {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+}

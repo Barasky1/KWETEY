@@ -1,0 +1,37 @@
+using KWETEY.Data;
+using KWETEY.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace KWETEY.Pages.Students
+{
+    public class CreateModel : PageModel
+    {
+        private readonly ApplicationDbContext _context;
+
+        [BindProperty]
+        public Student Student { get; set; }
+
+        public CreateModel(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public void OnGet()
+        {
+        }
+
+        public IActionResult OnPost()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            _context.Students.Add(Student);
+            _context.SaveChanges();
+
+            return RedirectToPage("/Students/Index");
+        }
+    }
+}

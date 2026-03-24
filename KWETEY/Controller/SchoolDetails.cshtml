@@ -1,0 +1,28 @@
+@model KWETEY.Models.School
+@{
+    ViewData["Title"] = "School Details";
+}
+
+<div style="padding:20px; border-radius:12px; background:@Model.BrandColor; color:white;">
+    <div style="text-align:center;">
+        <img src="@Model.LogoUrl" alt="@Model.SchoolName Logo" style="height:100px; margin-bottom:15px;" />
+        <h2>@Model.SchoolName</h2>
+        <p style="font-style:italic;">@Model.Motto</p>
+    </div>
+</div>
+
+<hr />
+
+<h3>School Information</h3>
+<ul>
+    <li><strong>Name:</strong> @Model.SchoolName</li>
+    <li><strong>Code:</strong> @Model.SchoolCode</li>
+    <li><strong>Logo URL:</strong> @Model.LogoUrl</li>
+    <li><strong>Theme Color:</strong> @Model.BrandColor</li>
+    <li><strong>Motto:</strong> @Model.Motto</li>
+    <li><strong>Active:</strong> @(Model.IsActive ? "Yes" : "No")</li>
+</ul>
+
+<hr />
+
+<a asp-action="Dashboard" class="btn btn-secondary">Back to Dashboard</a>

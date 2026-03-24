@@ -1,0 +1,36 @@
+﻿@page
+@model LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="~/css/login.css" />
+    <style>
+            /* Override accent color dynamically from model */
+            :root {
+                --accent: @(Model.SchoolColor ?? "#00b0f0");
+            }
+    </style>
+</head>
+<body>
+    <div class="glass-card">
+        <div class="logo-area">
+            <img src="@(Model.SchoolLogo ?? "/default-shield.png")" style="height:80px; margin-bottom:15px;" />
+            <h1 style="letter-spacing:4px; margin:0;">@Model.SchoolName</h1>
+            <p style="font-size:10px; opacity:0.6; letter-spacing:2px;">@Model.SchoolMotto</p>
+        </div>
+
+        <form method="post" style="margin-top:30px;">
+            <input type="text" asp-for="Input.Username" placeholder="Username"
+                   style="width:100%; padding:15px; margin-bottom:15px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white;" />
+
+            <input type="password" asp-for="Input.Password" placeholder="Password"
+                   style="width:100%; padding:15px; margin-bottom:20px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white;" />
+
+            <button type="submit" class="btn-signin">AUTHENTICATE</button>
+        </form>
+    </div>
+</body>
+</html>

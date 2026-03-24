@@ -1,0 +1,33 @@
+if (ModelState.IsValid)
+{
+// Hardcoded admin check
+if (Input.Username == "barasky" && Input.Password == "1234")
+{
+_logger.LogInformation("Admin logged in.");
+return RedirectToAction("Dashboard", "SuperAdmin");
+}
+
+// Normal Identity login
+var result = await _signInManager.PasswordSignInAsync(
+Input.Username,
+Input.Password,
+Input.RememberMe,
+lockoutOnFailure: false
+);
+
+if (result.Succeeded)
+{
+_logger.LogInformation("User logged in.");
+return RedirectToAction("Dashboard", "SuperAdmin");
+}
+
+if (result.IsLockedOut)
+{
+_logger.LogWarning("User account locked out.");
+ModelState.AddModelError(string.Empty, "Account locked.");
+return Page();
+}
+
+ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+return Page();
+}

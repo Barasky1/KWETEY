@@ -1,0 +1,117 @@
+@page
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@model KWETEY.Pages.Students.IndexModel
+@{
+    ViewData["Title"] = "Students";
+}
+
+<style>
+    /* Dashboard Theme Overrides */
+    .dashboard-card {
+        background-color: white;
+        border: 1px solid #ccc;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        margin-top: 20px;
+    }
+
+    .card-header {
+        background-color: #111;
+        color: white;
+        padding: 10px 15px;
+        font-weight: bold;
+        font-size: 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-add {
+        background-color: #f39c12;
+        color: white;
+        padding: 5px 12px;
+        text-decoration: none;
+        font-size: 12px;
+        border-radius: 2px;
+        transition: background 0.2s;
+    }
+
+        .btn-add:hover {
+            background-color: #e67e22;
+            color: white;
+        }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+
+        .custom-table th {
+            background-color: #333;
+            color: white;
+            text-align: left;
+            padding: 10px;
+            font-weight: normal;
+            border: 1px solid #444;
+        }
+
+        .custom-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+    .action-link {
+        color: #337ab7;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .btn-delete {
+        background: none;
+        border: none;
+        color: #d9534f;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 0;
+        font-size: 13px;
+    }
+
+        .btn-delete:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="dashboard-card">
+    <div class="card-header">
+        <span>STUDENT LIST</span>
+        <a href="/Students/Create" class="btn-add">+ Add Student</a>
+    </div>
+
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Gender</th>
+                <th style="width: 150px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model.Students)
+            {
+                <tr>
+                    <td>@student.Name</td>
+                    <td>@student.Class</td>
+                    <td>@student.Gender</td>
+                    <td>
+                        <a href="/Students/Edit/@student.Id" class="action-link">Edit</a>
+                        <span style="color: #ccc;">|</span>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@student.Id" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                            <button type="submit" class="btn-delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

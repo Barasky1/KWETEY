@@ -1,0 +1,19 @@
+﻿<div class="id-card-canvas" style="width:337px; height:212px; border-radius:12px; border:1px solid #ddd; display:flex;">
+    <div class="accent" style="width:12px; background:@Model.SchoolColor;"></div>
+    <div class="main" style="flex:1; padding:15px; position:relative;">
+        <div class="header" style="display:flex; align-items:center; gap:10px;">
+            <img src="@Model.SchoolLogo" style="height:30px;" />
+            <span style="font-weight:900; font-size:11px;">@Model.SchoolName</span>
+        </div>
+        <div class="body" style="display:flex; margin-top:15px; gap:15px;">
+            <img src="@Model.StudentPhoto" style="width:80px; height:100px; border-radius:6px; object-fit:cover;" />
+            <div class="details">
+                <small>NAME</small><strong>@Model.FullName</strong><br />
+                <small>ID NO</small><strong>@Model.Id</strong>
+            </div>
+        </div>
+        <div class="qr" style="position:absolute; bottom:15px; right:15px;">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=@Model.Id" />
+        </div>
+    </div>
+</div>
