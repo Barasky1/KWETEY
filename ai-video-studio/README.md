@@ -6,8 +6,14 @@ The initial app will target 30-second vertical videos and later add AI scripts, 
 
 This project is isolated in its own folder and branch. Existing KWETEY application files are not being replaced.
 
+## Build
+
+- Install dependencies with `npm install`.
+- Build the frontend with `npm run build`.
+- TypeScript configuration is in `tsconfig.json`.
+
 ## Status
 
 - Project folder created.
-- Frontend and backend scaffolding to follow.
-- Social publishing is not connected yet; platform authorization and API credentials will be required.
+- Frontend starter dashboard is in place.
+- AI generation, rendering, scheduling, and social publishing integrations are not connected yet; platform authorization and API credentials will be required.
