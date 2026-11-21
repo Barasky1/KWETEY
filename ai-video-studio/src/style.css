@@ -8,3 +8,5 @@ button:disabled{opacity:.65;cursor:wait}.spin{animation:spin 1s linear infinite}
 
 .result-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.scene-image{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;margin-bottom:12px;background:#191725}.image-status{font-size:10px;color:#b99cff;margin:10px 0}
 @media(max-width:700px){.result-actions{justify-content:flex-start}}
+
+.render-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.render-canvas{display:none}.video-output{margin-top:14px;padding:14px;background:#0b0d15;border:1px solid #39334b;border-radius:9px;display:flex;flex-direction:column;align-items:flex-start;gap:10px}.video-output video{width:100%;max-height:540px;background:#000;border-radius:7px}.video-output p{font-size:9px;color:#aaa0bb;margin:0;line-height:1.5}.video-output a{text-decoration:none}
