@@ -52,8 +52,12 @@ export default function App() {
    for(let i=0;i<script.scenes.length;i++){
     const scene=script.scenes[i];
     const response=await fetch('/api/generate-image',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({prompt:scene.visual+'; cinematic, high detail, professional short-form video still, no text, no watermark. Aspect ratio '+format})});
-    if(!response.ok){const err=await response.json().catch(()=>({}));throw new Error(err.error||'Image generation failed.');}
-    const url=URL.createObjectURL(await response.blob());setImages(prev=>({...prev,[i]:url}));setImageStatus('Generated '+(i+1)+' of '+script.scenes.length+' scene images.');
+    const data=await response.json().catch(()=>({error:'Invalid image service response.'}));
+    if(!response.ok)throw new Error(data.error||'Image generation failed.');
+    if(!data.key||!data.stored)throw new Error('The generated image was not saved to the media library.');
+    const mediaResponse=await fetch('/api/media?key='+encodeURIComponent(data.key));
+    if(!mediaResponse.ok)throw new Error('Image saved, but could not be loaded from the media library.');
+    const url=URL.createObjectURL(await mediaResponse.blob());setImages(prev=>({...prev,[i]:url}));setImageStatus('Saved image '+(i+1)+' of '+script.scenes.length+' to your permanent media library.');
    }
    setImageStatus('All scene images generated.');
   }catch(error){setImageStatus(error instanceof Error?error.message:'Image generation failed.');}
