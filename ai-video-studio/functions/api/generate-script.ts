@@ -11,8 +11,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body)
     });
     const payload = await upstream.text();
+    const contentType = upstream.headers.get("content-type") || "";
+    if (!contentType.includes("application/json") || payload.trimStart().startsWith("<!DOCTYPE html") || payload.trimStart().startsWith("<html")) {
+      return json({ error: "The connected AI Worker returned HTML instead of JSON. Check the IMAGE_ENGINE service binding and Worker deployment.", upstreamStatus: upstream.status, upstreamContentType: contentType || "missing" }, 502);
+    }
     return new Response(payload, { status: upstream.status, headers: {
-      "content-type": upstream.headers.get("content-type") || "application/json; charset=utf-8",
+      "content-type": "application/json; charset=utf-8",
       "cache-control": "no-store"
     }});
   } catch {
