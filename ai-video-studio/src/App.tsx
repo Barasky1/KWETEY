@@ -18,7 +18,10 @@ export default function App() {
  const [rendering,setRendering]=useState(false);
  const [renderStatus,setRenderStatus]=useState('');
  const [videoUrl,setVideoUrl]=useState('');
- const [speaking,setSpeaking]=useState(false);\n const [voiceUrl,setVoiceUrl]=useState('');\n const [voiceLoading,setVoiceLoading]=useState(false);\n const [voiceStatus,setVoiceStatus]=useState('');
+ const [speaking,setSpeaking]=useState(false);
+ const [voiceUrl,setVoiceUrl]=useState('');
+ const [voiceLoading,setVoiceLoading]=useState(false);
+ const [voiceStatus,setVoiceStatus]=useState('');
  const canvasRef=useRef<HTMLCanvasElement|null>(null);
  async function buildScript(){
   if(topic.trim().length<4){setStatus('Please enter a topic with at least 4 characters.');return;}
@@ -45,7 +48,16 @@ export default function App() {
   finally{setImageLoading(false);}
  }
 
- async function generateVoice(){\n  if(!script)return;setVoiceLoading(true);setVoiceStatus('Generating AI narration…');\n  try{const response=await fetch('/api/generate-voice',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:script.narration,speaker:'asteria'})});\n   if(!response.ok){const error=await response.json().catch(()=>({}));throw new Error(error.error||'AI voice generation failed.');}\n   const blob=await response.blob();if(!blob.type.startsWith('audio/'))throw new Error('The voice service returned an invalid audio file.');\n   if(voiceUrl)URL.revokeObjectURL(voiceUrl);const url=URL.createObjectURL(blob);setVoiceUrl(url);setVoiceStatus('AI narration is ready. It will be included in the exported video.');\n  }catch(error){setVoiceStatus(error instanceof Error?error.message:'AI narration failed.');}\n  finally{setVoiceLoading(false);}\n }\n function toggleNarration(){
+ async function generateVoice(){
+  if(!script)return;setVoiceLoading(true);setVoiceStatus('Generating AI narration…');
+  try{const response=await fetch('/api/generate-voice',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:script.narration,speaker:'asteria'})});
+   if(!response.ok){const error=await response.json().catch(()=>({}));throw new Error(error.error||'AI voice generation failed.');}
+   const blob=await response.blob();if(!blob.type.startsWith('audio/'))throw new Error('The voice service returned an invalid audio file.');
+   if(voiceUrl)URL.revokeObjectURL(voiceUrl);const url=URL.createObjectURL(blob);setVoiceUrl(url);setVoiceStatus('AI narration is ready. It will be included in the exported video.');
+  }catch(error){setVoiceStatus(error instanceof Error?error.message:'AI narration failed.');}
+  finally{setVoiceLoading(false);}
+ }
+ function toggleNarration(){
   if(!script||!('speechSynthesis' in window))return;
   if(speaking){window.speechSynthesis.cancel();setSpeaking(false);return;}
   const utterance=new SpeechSynthesisUtterance(script.narration);
@@ -63,7 +75,10 @@ export default function App() {
    canvas.width=dims[0];canvas.height=dims[1];
    const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas rendering is not supported.');
    const loaded=await Promise.all(script.scenes.map((_,i)=>new Promise<HTMLImageElement>((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Could not load scene image '+(i+1)));img.src=images[i];})));
-   const audioElement=new Audio(voiceUrl);audioElement.preload='auto';\n   await new Promise<void>((resolve,reject)=>{audioElement.oncanplaythrough=()=>resolve();audioElement.onerror=()=>reject(new Error('Could not load the AI narration audio.'));audioElement.load();});\n   const audioContext=new AudioContext();const audioSource=audioContext.createMediaElementSource(audioElement);const audioDestination=audioContext.createMediaStreamDestination();audioSource.connect(audioDestination);\n   const stream=canvas.captureStream(30);audioDestination.stream.getAudioTracks().forEach(track=>stream.addTrack(track));
+   const audioElement=new Audio(voiceUrl);audioElement.preload='auto';
+   await new Promise<void>((resolve,reject)=>{audioElement.oncanplaythrough=()=>resolve();audioElement.onerror=()=>reject(new Error('Could not load the AI narration audio.'));audioElement.load();});
+   const audioContext=new AudioContext();const audioSource=audioContext.createMediaElementSource(audioElement);const audioDestination=audioContext.createMediaStreamDestination();audioSource.connect(audioDestination);
+   const stream=canvas.captureStream(30);audioDestination.stream.getAudioTracks().forEach(track=>stream.addTrack(track));
    const mime=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'].find(t=>MediaRecorder.isTypeSupported(t));
    if(!mime)throw new Error('This browser does not support WebM video export. Try Chrome.');
    const recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:6500000});
