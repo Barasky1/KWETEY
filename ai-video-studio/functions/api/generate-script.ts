@@ -1,3 +1,4 @@
+type PagesFunction<E> = (context: { request: Request; env: E }) => Promise<Response>;
 interface Env {
   AI?: { run(model: string, input: Record<string, unknown>): Promise<unknown> };
 }
