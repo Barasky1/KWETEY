@@ -8,6 +8,8 @@ export const onRequestPost:PagesFunction<Env>=async({request,env})=>{
  if(prompt.length<8)return json({error:"Add more detail to the scene prompt."},400);
  if(!env.IMAGE_ENGINE)return json({error:"The image-generation service is not connected yet.",code:"IMAGE_ENGINE_MISSING"},503);
  try{
-  return await env.IMAGE_ENGINE.fetch("https://image-engine/generate",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({prompt})});
+  const response=await env.IMAGE_ENGINE.fetch("https://image-engine/generate",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({prompt})});
+  const data=await response.json().catch(()=>({error:"Invalid response from image service."}));
+  return json(data,response.status);
  }catch(e){return json({error:e instanceof Error?e.message:"Image generation failed."},502)}
 };
