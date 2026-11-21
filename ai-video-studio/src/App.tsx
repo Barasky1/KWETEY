@@ -31,7 +31,7 @@ export default function App() {
  const canvasRef=useRef<HTMLCanvasElement|null>(null);
  async function discoverTopics(){
   setTrendsLoading(true);setTrendsStatus('Checking Google Trends for Ghana…');
-  try{const response=await fetch('/api/trending-topics');const data=await response.json();if(!response.ok)throw new Error(data.error||'Could not load trending topics.');setTrends(data.topics||[]);setTrendsStatus('Trending searches from Ghana · '+new Date(data.updatedAt).toLocaleTimeString());}
+  try{const response=await fetch('/api/trending-topics');const raw=await response.text();let data;try{data=JSON.parse(raw)}catch{throw new Error(response.status===404?'The trends API route was not found. Refresh the site after deployment.':'The trends API returned a webpage instead of JSON. Check the Pages deployment and API routes.')}if(!response.ok)throw new Error(data.error||'Could not load trending topics.');setTrends(data.topics||[]);setTrendsStatus('Trending searches from Ghana · '+new Date(data.updatedAt).toLocaleTimeString());}
   catch(error){setTrendsStatus(error instanceof Error?error.message:'Could not load trending topics.');}
   finally{setTrendsLoading(false);}
  }
@@ -40,7 +40,7 @@ export default function App() {
   setLoading(true);setStatus('Building your video script…');setScript(null);
   try{
    const response=await fetch('/api/generate-script',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({topic,duration:Number(duration),format,tone})});
-   const data=await response.json();
+   const raw=await response.text();let data;try{data=JSON.parse(raw)}catch{throw new Error(response.status===404?'The script API route was not found. Refresh the site after deployment.':'The script service returned a webpage instead of JSON. The API route or Worker service needs attention.')} 
    if(!response.ok)throw new Error(data.error||'Could not build script.');
    setScript(data);setStatus('Your script is ready. Review the scenes below.');
   }catch(error){setStatus(error instanceof Error?error.message:'Something went wrong.');}
