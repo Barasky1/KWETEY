@@ -87,7 +87,7 @@ export default function App() {
      for(const word of parts){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);
      const lineHeight=fontSize*1.2;lines.forEach((text,j)=>ctx.fillText(text,iw/2,ih*.82+(j-(lines.length-1)/2)*lineHeight));
      ctx.shadowBlur=0;ctx.fillStyle='rgba(255,255,255,.8)';ctx.font='500 '+Math.round(iw*.018)+'px Arial';ctx.textAlign='left';ctx.fillText('AI VIDEO STUDIO',iw*.055,ih*.06);
-     await new Promise(requestAnimationFrame);
+     await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
     }
     elapsed+=scene.seconds;setRenderStatus('Rendering scene '+(i+1)+' of '+loaded.length+' · '+Math.round(elapsed/total*100)+'%');
    }
