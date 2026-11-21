@@ -100,7 +100,7 @@ export default function App() {
      let baseW,baseH;if(imageRatio>canvasRatio){baseH=ih;baseW=ih*imageRatio;}else{baseW=iw;baseH=iw/imageRatio;}
      const dw=baseW*scale,dh=baseH*scale;
      const driftX=(dw-iw)*(.45+progress*.1),driftY=(dh-ih)*(.45-progress*.1);
-     ctx.fillStyle='#080811';ctx.fillRect(0,0,iw,ih);ctx.save();ctx.beginPath();ctx.rect(0,0,iw,ih);ctx.clip();ctx.drawImage(img,(iw-dw)/2-driftX,(ih-dh)/2-driftY,dw,dh);ctx.restore();
+     ctx.fillStyle='#080811';ctx.fillRect(0,0,iw,ih);ctx.save();ctx.beginPath();ctx.rect(0,0,iw,ih);ctx.clip();if(i>0&&progress<.18){const prev=loaded[i-1],pr=prev.width/prev.height;let pw,ph;if(pr>canvasRatio){ph=ih;pw=ih*pr;}else{pw=iw;ph=iw/pr;}const ps=1.10,fade=Math.min(1,progress/.18);ctx.drawImage(prev,(iw-pw*ps)/2,(ih-ph*ps)/2,pw*ps,ph*ps);ctx.globalAlpha=fade;ctx.drawImage(img,(iw-dw)/2-driftX,(ih-dh)/2-driftY,dw,dh);ctx.globalAlpha=1;}else{ctx.drawImage(img,(iw-dw)/2-driftX,(ih-dh)/2-driftY,dw,dh);}ctx.restore();
      const gradient=ctx.createLinearGradient(0,ih*.55,0,ih);gradient.addColorStop(0,'rgba(0,0,0,0)');gradient.addColorStop(1,'rgba(0,0,0,.78)');ctx.fillStyle=gradient;ctx.fillRect(0,0,iw,ih);
      const fontSize=Math.round(iw*.055);ctx.font='700 '+fontSize+'px Arial';ctx.textAlign='center';ctx.fillStyle='#ffffff';ctx.shadowColor='#000000';ctx.shadowBlur=12;
      const words=scene.on_screen_text||scene.label;const maxWidth=iw*.82;const parts=words.split(' ');let lines:string[]=[],line='';
@@ -109,7 +109,7 @@ export default function App() {
      ctx.shadowBlur=0;ctx.fillStyle='rgba(255,255,255,.8)';ctx.font='500 '+Math.round(iw*.018)+'px Arial';ctx.textAlign='left';ctx.fillText('AI VIDEO STUDIO',iw*.055,ih*.06);
      await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
     }
-    elapsed+=scene.seconds;setRenderStatus('Rendering scene '+(i+1)+' of '+loaded.length+' · '+Math.round(elapsed/total*100)+'%');
+    elapsed+=scene.seconds;setRenderStatus('Applying cinematic transitions · scene '+(i+1)+' of '+loaded.length+' · '+Math.round(elapsed/total*100)+'%');
    }
    recorder.stop();await stopped;audioElement.pause();if(musicElement)musicElement.pause();audioSource.disconnect();musicSource?.disconnect();musicGain?.disconnect();await audioContext.close();stream.getTracks().forEach(track=>track.stop());
    const blob=new Blob(chunks,{type:'video/webm'});const url=URL.createObjectURL(blob);setVideoUrl(url);setRenderStatus('Video ready with AI narration and optional background music. Download the WebM file below.');
