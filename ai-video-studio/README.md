@@ -17,3 +17,6 @@ This project is isolated in its own folder and branch. Existing KWETEY applicati
 - Project folder created.
 - Frontend starter dashboard is in place.
 - AI generation, rendering, scheduling, and social publishing integrations are not connected yet; platform authorization and API credentials will be required.
+
+
+Deployment trigger check: Cloudflare Pages path filtering is disabled for this project so commits on this production branch are not skipped.
